@@ -4,7 +4,7 @@ require('./config/passportConfig');
 
 const express = require('express');
 var bodyParser = require('body-parser');
-const cors = require('cors');
+const cors = require('cors'); // 외부요청 허용
 const passport = require('passport');
 
 //var http = require('http').Server(app); 
@@ -18,9 +18,8 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(passport.initialize());
-app.use('/api', rtsIndex);
-
+app.use(passport.initialize()); // 초기화
+app.use('/api', rtsIndex); // 기본 경로 설정
 
 
 // error handler
@@ -32,11 +31,6 @@ app.use((err, req, res, next) => {
     }
     
 });
-
-
-
- 
-
 
 // start server
 app.listen(process.env.PORT, () => console.log(`Server started at port : ${process.env.PORT}`));

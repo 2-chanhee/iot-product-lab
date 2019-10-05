@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
-var userSchema = new mongoose.Schema({
+var userSchema = new mongoose.Schema({ // 필드 정의
     fullName: {
         type: String,
         required: 'Full name can\'t be empty'
@@ -24,19 +22,8 @@ userSchema.path('email').validate((val) => {
     return emailRegex.test(val);
 }, 'Invalid e-mail.');
 
-// Events
-/* userSchema.pre('save', function (next) {
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(this.password, salt, (err, hash) => {
-            this.password = hash;
-            this.saltSecret = salt;
-            next();
-        });
-    });
-});
- */
 
-// Methods
+// 비밀번호 검증
 userSchema.methods.verifyPassword = function (password) {
     if(password==this.password){
         return password;
@@ -45,15 +32,5 @@ userSchema.methods.verifyPassword = function (password) {
        return false;
    }
 };
-
-userSchema.methods.generateJwt = function () {
-    return jwt.sign({ _id: this._id},
-        process.env.JWT_SECRET,
-    {
-        expiresIn: process.env.JWT_EXP
-    });
-}
-
-
 
 mongoose.model('User', userSchema);

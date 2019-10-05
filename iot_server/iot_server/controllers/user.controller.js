@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
-const _ = require('lodash');
-
 const User = mongoose.model('User');
 const Data = mongoose.model('Data');
 
-module.exports.register = (req, res, next) => {
+//회원가입
+module.exports.register = (req, res, next) => { 
     var user = new User();
     user.fullName = req.body.fullName;
     user.email = req.body.email;
@@ -15,7 +14,7 @@ module.exports.register = (req, res, next) => {
         if (!err)
             res.send(doc);
         else {
-            if (err.code == 11000)
+            if (err.code == 11000) //중복 키 오류
                 res.status(422).send(['Duplicate email adrress found.']);
             else
                 return next(err);
@@ -23,28 +22,14 @@ module.exports.register = (req, res, next) => {
 
     });
 }
-/*
-module.exports.authenticate = (req, res, next) => {
-    // call for passport authentication
-    passport.authenticate('local', (err, user, info) => {       
-        // error from passport middleware
-        if (err) return res.status(400).json(err);
-        // registered user
-        else if (user) return res.status(200).json({ "token": user.generateJwt() });
-        // unknown user or wrong password
-        else return res.status(404).json(info);
-    })(req, res);
-}
-*/
-
+//로그인
 module.exports.Login = (req,res,next) =>{
     User.find((err,user)=>{
         res.json({user:user});
     });
 }
-
+//gps 데이터 저장
 module.exports.savegps = (req, res, next) => {
-
     var data = new Data();
      data.x = req.body.x;
     data.y = req.body.y;
@@ -58,7 +43,7 @@ module.exports.savegps = (req, res, next) => {
         }
 
     })};
-
+//파이썬에서 데이터 가져옴
 module.exports.getdata = (req,res,next) =>{
 
 Data.find((err,docs) => {
