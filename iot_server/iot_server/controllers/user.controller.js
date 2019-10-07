@@ -43,7 +43,7 @@ module.exports.savegps = (req, res, next) => {
         }
 
     })};
-//파이썬에서 데이터 가져옴
+//앱에서 데이터 요청
 module.exports.getdata = (req,res,next) =>{
 
 Data.find((err,docs) => {
